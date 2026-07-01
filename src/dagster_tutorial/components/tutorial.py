@@ -16,8 +16,7 @@ class Tutorial(dg.Component, dg.Model, dg.Resolvable):
     def build_defs(self, context: dg.ComponentLoadContext) -> dg.Definitions:
         _etl_assets = []
 
-        for etl in self.etl_steps:
-
+        def make_table_asset(etl):
             @dg.asset(
                 name=etl.table,
             )
@@ -31,7 +30,10 @@ class Tutorial(dg.Component, dg.Model, dg.Resolvable):
                         """
                     )
 
-            _etl_assets.append(_table)
+            return _table
+
+        for etl in self.etl_steps:
+            _etl_assets.append(make_table_asset(etl))
 
         return dg.Definitions(
             assets=_etl_assets,
