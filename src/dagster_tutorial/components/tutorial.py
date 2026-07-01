@@ -1,11 +1,10 @@
 import dagster as dg
 from dagster_duckdb import DuckDBResource
 
+
 class ETL(dg.Model):
     url_path: str
     table: str
-
-
 
 
 class Tutorial(dg.Component, dg.Model, dg.Resolvable):
@@ -19,6 +18,8 @@ class Tutorial(dg.Component, dg.Model, dg.Resolvable):
         def make_table_asset(etl):
             @dg.asset(
                 name=etl.table,
+                group_name="bronze",
+                tags={"layer": "bronze"},
             )
             def _table(duckdb: DuckDBResource):
                 with duckdb.get_connection() as conn:
